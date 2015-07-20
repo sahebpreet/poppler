@@ -604,7 +604,7 @@ public:
   int getPageNum() const { return page; }
   GooString *getName() const { return name; }
   GooString *getModified() const { return modified; }
-  Guint getFlags() const { return flags; }
+  Guint getFlags();
   AnnotAppearance *getAppearStreams() const { return appearStreams; }
   GooString *getAppearState() const { return appearState; }
   AnnotBorder *getBorder() const { return border; }

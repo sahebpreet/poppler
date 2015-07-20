@@ -1567,6 +1567,16 @@ void Annot::setAppearanceState(const char *state) {
   }
 }
 
+Guint Annot::getFlags() {
+
+    if(isVisible(gFalse) == gTrue) {
+	flags &= ~Annot::flagHidden;
+    } else {
+	flags |= Annot::flagHidden;
+    }
+    return flags;
+}
+
 void Annot::invalidateAppearance() {
   annotLocker();
   if (appearStreams) { // Remove existing appearance streams
