@@ -65,6 +65,8 @@ namespace Poppler {
     class PDFConverter;
     class PSConverter;
 
+    class StructTreeModel;
+
     /**
 	Debug/error function.
 
@@ -1403,6 +1405,14 @@ QString subject = m_doc->info("Subject");
 	bool hasOptionalContent() const;
 
 	/**
+	   Test whether this document has "structure tree".
+
+	   Structure Tree is used to get the structure of tags
+	   used in the document.
+	*/
+	bool hasStructTree() const;
+
+	/**
 	   Itemviews model for optional content.
 
 	   The model is owned by the document.
@@ -1410,6 +1420,13 @@ QString subject = m_doc->info("Subject");
 	   \since 0.8
 	*/
 	OptContentModel *optionalContentModel();
+
+	/**
+	   Itemviews model for struct tree root.
+
+	   The model is owned by the document.
+	*/
+	StructTreeModel *structTreeModel();
 
 	/**
 	   Document-level JavaScript scripts.

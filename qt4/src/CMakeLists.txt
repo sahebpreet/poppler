@@ -27,6 +27,7 @@ set(poppler_qt4_SRCS
   poppler-page-transition.cc
   poppler-media.cc
   ArthurOutputDev.cc
+  poppler-structtree.cc
 )
 qt4_automoc(${poppler_qt4_SRCS})
 add_library(poppler-qt4 SHARED ${poppler_qt4_SRCS})
@@ -46,5 +47,6 @@ install(FILES
   poppler-export.h
   poppler-page-transition.h
   poppler-media.h
+  poppler-structtree.h
   DESTINATION include/poppler/qt4)
 

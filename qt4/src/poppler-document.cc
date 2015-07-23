@@ -43,6 +43,7 @@
 
 #include "poppler-private.h"
 #include "poppler-page-private.h"
+#include "poppler-structtree.h"
 
 #if defined(USE_CMS)
 #if defined(USE_LCMS1)
@@ -602,6 +603,19 @@ namespace Poppler {
 	    m_doc->m_optContentModel = new OptContentModel(m_doc->doc->getOptContentConfig(), 0);
 	}
         return (OptContentModel *)m_doc->m_optContentModel;
+    }
+
+    bool Document::hasStructTree() const
+    {
+        return (m_doc->doc->getStructTreeRoot());
+    }
+
+    StructTreeModel *Document::structTreeModel()
+    {
+	if(m_doc->m_structTreeModel.isNull()) {
+	    m_doc->m_structTreeModel = new StructTreeModel(m_doc->doc->getStructTreeRoot(), 0);
+	}
+	return( StructTreeModel *)m_doc->m_structTreeModel;
     }
 
     QStringList Document::scripts() const

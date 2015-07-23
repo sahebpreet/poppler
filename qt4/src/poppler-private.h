@@ -144,6 +144,7 @@ namespace Poppler {
 	Document::RenderBackend m_backend;
 	QList<EmbeddedFile*> m_embeddedFiles;
 	QPointer<OptContentModel> m_optContentModel;
+	QPointer<StructTreeModel> m_structTreeModel;
 	QColor paperColor;
 	int m_hints;
 	static int count;
