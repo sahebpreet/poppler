@@ -994,7 +994,30 @@ delete it;
 	static Document *loadFromData(const QByteArray &fileContents,
 			      const QByteArray &ownerPassword=QByteArray(),
 			      const QByteArray &userPassword=QByteArray());
-  
+
+	/**
+	   Load the document from memory
+
+	   \param device QIODevice for loading linearized files
+	   \param ownerPassword the Latin1-encoded owner password to use in
+	   loading the file
+	   \param userPassword the Latin1-encoded user ("open") password
+	   to use in loading the file
+
+	   \return the loaded document, or NULL on error
+
+	   \note The caller owns the pointer to Document, and this should
+	   be deleted when no longer required.
+
+	   \warning The returning document may be locked if a password is required
+	   to open the file, and one is not provided (as the userPassword).
+
+	   \since 0.6
+	*/
+	static Document *loadFromDevice(QIODevice *device,
+			      const QByteArray &ownerPassword=QByteArray(),
+			      const QByteArray &userPassword=QByteArray());
+
 	/**
 	   Get a specified Page
      

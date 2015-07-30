@@ -46,6 +46,8 @@
 
 #include "poppler-qt4.h"
 #include "poppler-embeddedfile-private.h"
+#include "poppler/CachedFile.h"
+#include "poppler-cached-file-loader.h"
 
 class LinkDest;
 class FormWidget;
@@ -109,7 +111,20 @@ namespace Poppler {
 		delete ownerPassword;
 		delete userPassword;
 	    }
-	
+
+	DocumentData(QIODevice *device, GooString *ownerPassword, GooString *userPassword)
+	    {
+		Object obj;
+		obj.initNull();
+		PopplerCachedFileLoader * loader = new PopplerCachedFileLoader(device);
+		CachedFile *cachedFile = new CachedFile( loader, new GooString( device->objectName().toUtf8().data() ) );
+		CachedFileStream *str = new CachedFileStream( cachedFile, 0, gFalse, cachedFile->getLength(), &obj );
+		init();
+		doc = new PDFDoc(str, ownerPassword, userPassword);
+		delete ownerPassword;
+		delete userPassword;
+	    }
+
 	void init();
 	
 	~DocumentData();

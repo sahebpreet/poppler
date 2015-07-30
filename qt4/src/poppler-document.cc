@@ -75,7 +75,18 @@ namespace Poppler {
 					     new GooString(userPassword.data()));
 	return DocumentData::checkDocument(doc);
     }
-    
+
+    Document *Document::loadFromDevice(QIODevice *device,
+			      const QByteArray &ownerPassword,
+			      const QByteArray &userPassword)
+    {
+	// create stream
+	DocumentData *doc = new DocumentData(device,
+					     new GooString(ownerPassword.data()),
+					     new GooString(userPassword.data()));
+	return DocumentData::checkDocument(doc);
+    }
+
     Document *DocumentData::checkDocument(DocumentData *doc)
     {
 	Document *pdoc;

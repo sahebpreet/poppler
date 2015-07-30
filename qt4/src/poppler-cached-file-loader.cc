@@ -32,8 +32,6 @@ namespace Poppler {
 
     PopplerCachedFileLoader::~PopplerCachedFileLoader()
     {
-	m_device->close();
-	delete m_device;
     }
 
     size_t PopplerCachedFileLoader::init( GooString * /*url*/, CachedFile * /*cachedFile*/ )
