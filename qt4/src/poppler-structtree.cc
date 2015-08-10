@@ -39,8 +39,14 @@ namespace Poppler
   {
     int numOfChildren = structElement->getNumChildren();
     StructElement *child;
+
+    if( numOfChildren == 0 )
+    {
+	parent->setFetchMore( true );
+    }
     if( structElement->getTypeName() )
 	m_name = QString(structElement->getTypeName());
+    m_structElement = structElement;
     for(int i = 0; i < numOfChildren; i ++)
     {
 	child = structElement->getChild( i );
@@ -160,6 +166,28 @@ namespace Poppler
   {
     return QAbstractItemModel::headerData( section, orientation, role );
   }
+
+  bool StructTreeModel::canFetchMore(const QModelIndex& parent) const
+  {
+    return d->nodeFromIndex( parent, false )->fetchMore();
+  }
+
+  void StructTreeModel::fetchMore(const QModelIndex& parent)
+  {
+    StructTreeItem * node = d->nodeFromIndex( parent, false );
+    node->setFetchMore( false );
+    int numOfChildren = node->childList().size();
+    StructElement *child;
+    for(int i = 0; i < numOfChildren; i ++)
+    {
+	child = node->childList().at( i )->structElement();
+	if( child && ! child->getNumChildren() && child->getType() == StructElement::MCID )
+	{
+	    node->childList().at( i )->setName( QString( child->getText( gFalse )->getCString() ) );
+	}
+    }
+  }
+
 }
 
 #include "poppler-structtree.moc"

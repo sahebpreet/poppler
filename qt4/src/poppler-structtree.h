@@ -61,6 +61,8 @@ namespace Poppler
     Qt::ItemFlags flags ( const QModelIndex & index ) const;
 
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
+    virtual bool canFetchMore( const QModelIndex & parent ) const;
+    virtual void fetchMore( const QModelIndex & parent );
 
     private:
     StructTreeModel(StructTreeRoot* structTreeContent, QObject* parent = 0);

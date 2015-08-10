@@ -34,11 +34,17 @@ namespace Poppler
     QList<StructTreeItem*> childList() { return m_children; }
     StructTreeItem* parent() { return m_parent; }
     QString name() const { return m_name; }
+    void setName( QString newName ) { m_name = newName; }
+    StructElement* structElement() { return m_structElement;}
+    bool fetchMore() { return m_fetchMore; }
+    void setFetchMore( bool fetchMore ) { m_fetchMore = fetchMore; }
 
     private:
     QList<StructTreeItem*> m_children;
     StructTreeItem *m_parent;
     QString m_name;
+    StructElement * m_structElement;
+    bool m_fetchMore;
   };
 
   class StructTreeModelPrivate
