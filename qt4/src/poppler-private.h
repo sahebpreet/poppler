@@ -32,6 +32,7 @@
 #include <QtCore/QFile>
 #include <QtCore/QPointer>
 #include <QtCore/QVector>
+#include <QtCore/QUrl>
 
 #include <config.h>
 #include <GfxState.h>
@@ -48,6 +49,7 @@
 #include "poppler-embeddedfile-private.h"
 #include "poppler/CachedFile.h"
 #include "poppler-cached-file-loader.h"
+#include "poppler/CurlCachedFile.h"
 
 class LinkDest;
 class FormWidget;
@@ -112,12 +114,12 @@ namespace Poppler {
 		delete userPassword;
 	    }
 
-	DocumentData(QIODevice *device, GooString *ownerPassword, GooString *userPassword)
+	DocumentData(QUrl &url, GooString *ownerPassword, GooString *userPassword)
 	    {
 		Object obj;
 		obj.initNull();
-		PopplerCachedFileLoader * loader = new PopplerCachedFileLoader(device);
-		CachedFile *cachedFile = new CachedFile( loader, new GooString( device->objectName().toUtf8().data() ) );
+		CurlCachedFileLoader * loader = new CurlCachedFileLoader();
+		CachedFile *cachedFile = new CachedFile( loader, new GooString( url.toString().toUtf8() ) );
 		CachedFileStream *str = new CachedFileStream( cachedFile, 0, gFalse, cachedFile->getLength(), &obj );
 		init();
 		doc = new PDFDoc(str, ownerPassword, userPassword);

@@ -998,7 +998,7 @@ delete it;
 	/**
 	   Load the document from memory
 
-	   \param device QIODevice for loading linearized files
+	   \param url URL to load linearized file from
 	   \param ownerPassword the Latin1-encoded owner password to use in
 	   loading the file
 	   \param userPassword the Latin1-encoded user ("open") password
@@ -1014,7 +1014,7 @@ delete it;
 
 	   \since 0.6
 	*/
-	static Document *loadFromDevice(QIODevice *device,
+	static Document *loadFromUrl(QUrl & url,
 			      const QByteArray &ownerPassword=QByteArray(),
 			      const QByteArray &userPassword=QByteArray());
 
