@@ -14,6 +14,7 @@
 #include "GfxState.h"
 #include "GfxFont.h"
 #include "Annot.h"
+#include <GooList.h>
 #include <vector>
 
 
@@ -26,6 +27,7 @@ MarkedContentOutputDev::MarkedContentOutputDev(int mcidA):
   unicodeMap(NULL)
 {
   currentColor.r = currentColor.g = currentColor.b = 0;
+  m_boundingRects = new GooHash();
 }
 
 
@@ -54,6 +56,7 @@ void MarkedContentOutputDev::endSpan()
 
 void MarkedContentOutputDev::startPage(int pageNum, GfxState *state, XRef *xref)
 {
+  m_currentPage = pageNum;
   if (state) {
     pageWidth  = state->getPageWidth();
     pageHeight = state->getPageHeight();
@@ -126,7 +129,6 @@ void MarkedContentOutputDev::drawChar(GfxState *state,
   if (!inMarkedContent() || !uLen)
     return;
 
-
   // Color changes are tracked here so the color can be chosen depending on
   // the render mode (for mode 1 stroke color is used), so there is no need
   // to implement both updateFillColor() and updateStrokeColor().
@@ -176,6 +178,13 @@ void MarkedContentOutputDev::drawChar(GfxState *state,
   dy -= dy2;
   state->transformDelta(dx, dy, &w1, &h1);
   state->transform(xx, yy, &x1, &y1);
+
+  GooList * rects = (GooList * )m_boundingRects->lookup( GooString::fromInt( m_currentPage - 1 ) );
+  if( ! rects ) {
+    rects = new GooList();
+    m_boundingRects->add( GooString::fromInt( m_currentPage - 1 ), rects );
+  }
+  rects->append( new PDFRectangle( x1 / state->getPageWidth(), y1 / state->getPageHeight() - state->getTransformedFontSize() / state->getPageHeight(), x1 / state->getPageWidth() + dx / state->getPageWidth(), y1 / state->getPageHeight() ) );
 
   // Throw away characters that are not inside the page boundaries.
   if (x1 + w1 < 0 || x1 > pageWidth || y1 + h1 < 0 || y1 > pageHeight)

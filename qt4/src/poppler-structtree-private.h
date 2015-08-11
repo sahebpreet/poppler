@@ -38,6 +38,7 @@ namespace Poppler
     StructElement* structElement() { return m_structElement;}
     bool fetchMore() { return m_fetchMore; }
     void setFetchMore( bool fetchMore ) { m_fetchMore = fetchMore; }
+    QMap< QString, QVariant > & boundingRects() { return m_boundingRects; }
 
     private:
     QList<StructTreeItem*> m_children;
@@ -45,6 +46,7 @@ namespace Poppler
     QString m_name;
     StructElement * m_structElement;
     bool m_fetchMore;
+    QMap< QString, QVariant > m_boundingRects;
   };
 
   class StructTreeModelPrivate

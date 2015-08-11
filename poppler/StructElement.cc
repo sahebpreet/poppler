@@ -869,7 +869,8 @@ StructElement::StructElement(Dict *element,
   type(Unknown),
   treeRoot(treeRootA),
   parent(parentA),
-  s(new StructData())
+  s(new StructData()),
+  boundingRectangle( 0 )
 {
   assert(treeRoot);
   assert(element);
@@ -995,7 +996,7 @@ const Attribute *StructElement::findAttribute(Attribute::Type attributeType, GBo
   return NULL;
 }
 
-GooString* StructElement::appendSubTreeText(GooString *string, GBool recursive) const
+GooString* StructElement::appendSubTreeText(GooString *string, GBool recursive)
 {
   if (isContent() && !isObjectRef()) {
     MarkedContentOutputDev mcdev(getMCID());
@@ -1006,6 +1007,8 @@ GooString* StructElement::appendSubTreeText(GooString *string, GBool recursive) 
 
     for (TextSpanArray::const_iterator i = spans.begin(); i != spans.end(); ++i)
       string->append(i->getText());
+
+    boundingRectangle = mcdev.boundingRects();
 
     return string;
   }

@@ -236,7 +236,7 @@ public:
   //
   // A new string is returned, and the ownership passed to the caller.
   //
-  GooString *getText(GBool recursive = gTrue) const {
+  GooString *getText(GBool recursive = gTrue) {
     return appendSubTreeText(NULL, recursive);
   }
 
@@ -247,10 +247,11 @@ public:
     return getTextSpansInternal(mcdev);
   }
 
+  GooHash * boundingRects() { return boundingRectangle; }
   ~StructElement();
 
 private:
-  GooString* appendSubTreeText(GooString *string, GBool recursive) const;
+  GooString* appendSubTreeText(GooString *string, GBool recursive);
   const TextSpanArray& getTextSpansInternal(MarkedContentOutputDev& mcdev) const;
 
   typedef std::vector<Attribute*>     AttrPtrArray;
@@ -288,6 +289,7 @@ private:
   StructTreeRoot *treeRoot;
   StructElement *parent;
   mutable Object pageRef;
+  GooHash * boundingRectangle;
 
   union {
     StructData  *s;

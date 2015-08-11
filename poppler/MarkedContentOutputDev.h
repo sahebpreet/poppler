@@ -16,7 +16,9 @@
 #include "OutputDev.h"
 #include "GfxState.h"
 #include "GfxFont.h"
+#include "Page.h"
 #include <vector>
+#include <GooHash.h>
 
 class Dict;
 class UnicodeMap;
@@ -109,6 +111,7 @@ public:
   virtual void endMarkedContent(GfxState *state);
 
   const TextSpanArray& getTextSpans() const;
+  GooHash * boundingRects() { return m_boundingRects; }
 
 private:
 
@@ -125,6 +128,8 @@ private:
   double           pageWidth;
   double           pageHeight;
   UnicodeMap      *unicodeMap;
+  GooHash	  *m_boundingRects;
+  int 		   m_currentPage;
 };
 
 #endif /* !MARKEDCONTENTOUTPUTDEV_H */

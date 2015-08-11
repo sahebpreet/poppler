@@ -48,6 +48,11 @@ namespace Poppler
     Q_OBJECT
 
     public:
+
+    enum CustomItemDataRoles {
+	ItemBoundingRects = Qt::UserRole + 1
+    };
+
     virtual ~StructTreeModel(){};
 
     QModelIndex index(int row, int column, const QModelIndex &parent) const;

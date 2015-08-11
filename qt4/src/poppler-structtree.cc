@@ -150,14 +150,37 @@ namespace Poppler
       case Qt::DisplayRole:
         return node->name();
         break;
+      case StructTreeModel::ItemBoundingRects:
+	if( node->boundingRects().isEmpty() ) {
+	  GooHash * boundingRectsMap = node->structElement()->boundingRects();
+	  if( boundingRectsMap ) {
+	    GooHashIter * iter;
+	    GooString * pageNum;
+	    GooList * rects;
+	    boundingRectsMap->startIter( & iter );
+	    while( boundingRectsMap->getNext( & iter, & pageNum, ( void * * ) & rects ) ) {
+	      if( pageNum )
+	      {
+		QString page( pageNum->getCString() );
+		QList< QVariant > rectList;
+		for( int i = 0; i < rects->getLength(); i ++ ) {
+		  PDFRectangle rect = *( PDFRectangle * )rects->get( i );
+		  rectList.append( QRectF( rect.x1, rect.y1, rect.x2 - rect.x1, rect.y2 - rect.y1 ) );
+		}
+		node->boundingRects().insert( page, rectList ) ;
+	      }
+	    }
+	    return node->boundingRects();
+	  }
+	  return QVariant();
+	}
+	return node->boundingRects();
     }
-
     return QVariant();
   }
 
   Qt::ItemFlags StructTreeModel::flags ( const QModelIndex & index ) const
   {
-    StructTreeItem *node = d->nodeFromIndex(index, false);
     Qt::ItemFlags itemFlags = Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable;
     return itemFlags;
   }
@@ -175,15 +198,17 @@ namespace Poppler
   void StructTreeModel::fetchMore(const QModelIndex& parent)
   {
     StructTreeItem * node = d->nodeFromIndex( parent, false );
+    StructTreeItem * currentChild;
     node->setFetchMore( false );
     int numOfChildren = node->childList().size();
     StructElement *child;
     for(int i = 0; i < numOfChildren; i ++)
     {
-	child = node->childList().at( i )->structElement();
+	currentChild = node->childList().at( i );
+	child = currentChild->structElement();
 	if( child && ! child->getNumChildren() && child->getType() == StructElement::MCID )
 	{
-	    node->childList().at( i )->setName( QString( child->getText( gFalse )->getCString() ) );
+	    currentChild->setName( QString( child->getText( gFalse )->getCString() ) );
 	}
     }
   }
