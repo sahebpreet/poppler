@@ -48,7 +48,6 @@
 #include "poppler-qt4.h"
 #include "poppler-embeddedfile-private.h"
 #include "poppler/CachedFile.h"
-#include "poppler-cached-file-loader.h"
 #include "poppler/CurlCachedFile.h"
 
 class LinkDest;
